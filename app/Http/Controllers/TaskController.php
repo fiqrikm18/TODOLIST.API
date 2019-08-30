@@ -42,14 +42,25 @@ class TaskController extends Controller
         if($task->save()){
             return response()->json($this->responseOk);
         }else{
-            return \response()->json($this->responseBad);
+            return response()->json($this->responseBad);
         }
     }
 
     public function deleteTask($id){
         $task = Task::find($id);
         if($task->delete()){
-            return \response()->json($this->responseOk);
+            return response()->json($this->responseOk);
+        }else{
+            return response()->json($this->responseBad);
+        }
+    }
+
+    public function updateTaskStatus(Request $request, $id){
+        $task = Task::find($id);
+        $task->status = $request->status;
+
+        if($task->save()){
+            return response()->json($this->responseOk);
         }else{
             return response()->json($this->responseBad);
         }

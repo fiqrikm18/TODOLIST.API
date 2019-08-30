@@ -25,3 +25,6 @@ Route::delete("/users/{id}", "UserController@deleteUser");
 
 Route::get("tasks/", "TaskController@index");
 Route::get("tasks/{id}", "TaskController@getTaskByUser");
+Route::post("tasks", "TaskController@createTask");
+Route::delete("task/{id}", "TaskController@deleteTask");
+Route::put("tasks/{id}", "TaskController@updateTaskStatus");

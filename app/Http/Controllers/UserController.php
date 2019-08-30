@@ -25,7 +25,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         if($user != null || $user != ""){
-            return $data;
+            return $user;
         }else{
             return response()->json($this->responseBad);
         }
