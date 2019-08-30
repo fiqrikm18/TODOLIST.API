@@ -14,7 +14,7 @@ class TaskController extends Controller
 
     public function index(){
         $taskCount = Task::count();
-        $task = Task::all();
+        $task = Task::select('tasks.task', 'tasks.created_at', "tasks.status")->get();
 
         if($taskCount != 0){
             return $task;
@@ -24,13 +24,18 @@ class TaskController extends Controller
     }
 
     public function getTaskByUser($id){
+        $count = Task::find($id)->count();
         $data = DB::table("tasks")
-        ->select('tasks.task', 'tasks.created_at')
+        ->select('tasks.task', 'tasks.created_at', "tasks.status")
         ->join("users", "users.id", "=", "tasks.user_id")
         ->where(["users.id"=>$id])
         ->get();
 
-        return $data;
+        if($count >0){
+            return $data;
+        }else{
+            return response()->json($this->responseBad);
+        }
     }
 
     public function createTask(Request $request){
