@@ -14,27 +14,49 @@ class TaskController extends Controller
 
     public function index(){
         $taskCount = Task::count();
-        $task = Task::select('tasks.task', 'tasks.created_at', "tasks.status")->get();
+        $task = Task::select("tasks.id", 'tasks.task', 'tasks.created_at', "tasks.status")->get();
 
         if($taskCount != 0){
             return $task;
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 
     public function getTaskByUser($id){
         $count = Task::find($id)->count();
         $data = DB::table("tasks")
-        ->select('tasks.task', 'tasks.created_at', "tasks.status")
+        ->select("tasks.id", 'tasks.task', 'tasks.created_at', "tasks.status")
         ->join("users", "users.id", "=", "tasks.user_id")
         ->where(["users.id"=>$id])
+        ->orderBy("created_at", "desc")
         ->get();
 
         if($count >0){
             return $data;
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
+        }
+    }
+
+    public function getTaskByUserWithStatus($id, $status){
+        $count = Task::find($id)->count();
+        $data = DB::table("tasks")
+        ->select("tasks.id", 'tasks.task', 'tasks.created_at', "tasks.status")
+        ->join("users", "users.id", "=", "tasks.user_id")
+        ->where(["users.id"=>$id, 'status'=>$status])
+        ->get();
+
+        if($count >0){
+            return $data;
+        }else{
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 
@@ -45,18 +67,28 @@ class TaskController extends Controller
         $task->status = 'process';
 
         if($task->save()){
-            return response()->json($this->responseOk);
+            return response()->json(
+                [
+                    "status" => $this->responseOk
+                ]
+            );
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 
     public function deleteTask($id){
         $task = Task::find($id);
         if($task->delete()){
-            return response()->json($this->responseOk);
+            return response()->json([
+                "status" => $this->responseOk
+            ]);
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 
@@ -65,9 +97,13 @@ class TaskController extends Controller
         $task->status = $request->status;
 
         if($task->save()){
-            return response()->json($this->responseOk);
+            return response()->json([
+                "status" => $this->responseOk
+            ]);
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 }

@@ -17,7 +17,9 @@ class UserController extends Controller
         if($userCount!=0){
             return User::all();
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 
@@ -27,7 +29,9 @@ class UserController extends Controller
         if($user != null || $user != ""){
             return $user;
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
         
     }
@@ -39,9 +43,13 @@ class UserController extends Controller
         $user->password = md5($request->password);
 
         if($user->save()){
-            return response()->json($this->responseOk);
+            return response()->json([
+                "status" => $this->responseOk
+            ]);
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 
@@ -52,9 +60,13 @@ class UserController extends Controller
         $user->password = $request->password;
 
         if($user->save()){
-            return response()->json($this->responseOk);
+            return response()->json([
+                "status" => $this->responseOk
+            ]);
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 
@@ -62,9 +74,13 @@ class UserController extends Controller
         $user = User::find($id);
         
         if($user->delete()){
-            return response()->json($this->responseOk);
+            return response()->json([
+                "status" => $this->responseOk
+            ]);
         }else{
-            return response()->json($this->responseBad);
+            return response()->json([
+                "status" => $this->responseBad
+            ]);
         }
     }
 }
